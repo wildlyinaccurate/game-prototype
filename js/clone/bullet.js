@@ -1,0 +1,3 @@
+Clone.Bullet = function(gs) {
+
+};
