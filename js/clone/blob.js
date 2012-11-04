@@ -23,7 +23,11 @@ Clone.Blob = function(gs) {
     };
 
     this.shoot = function() {
+        var bullet = new Clone.Bullet(gs, {
+            coords: { x: this.coords.x, y: this.coords.y }
+        });
 
+        gs.addEntity(bullet);
     };
 
     this.update = function(gs) {
