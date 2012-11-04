@@ -3,8 +3,12 @@ Clone.Blob = function(gs) {
     this.isClone = false;
     this.width = 50;
     this.height = 50;
+    this.moveSpeed = 12;
 
-    this.moveSpeed = 10;
+    this.velocity = {
+        x: 0,
+        y: 0
+    };
 
     this.coords = {
         x: gs.width * 0.5,
@@ -31,7 +35,29 @@ Clone.Blob = function(gs) {
     };
 
     this.update = function(gs) {
+        newXCoord = this.coords.x + this.velocity.x;
+        newYCoord = this.coords.y + this.velocity.y;
 
+        minXCoord = this.width / 2;
+        maxXCoord = Clone.canvas.width - minXCoord;
+        minYCoord = this.height / 2;
+        maxYCoord = Clone.canvas.height - minYCoord;
+
+        // Keep the co-ordinates within the canvas
+        if (newXCoord < minXCoord) {
+            newXCoord = minXCoord;
+        } else if (newXCoord > maxXCoord) {
+            newXCoord = maxXCoord;
+        }
+
+        if (newYCoord < minYCoord) {
+            newYCoord = minYCoord;
+        } else if (newYCoord > maxYCoord) {
+            newYCoord = maxYCoord;
+        }
+
+        this.coords.y = newYCoord;
+        this.coords.x = newXCoord;
     };
 
     this.draw = function(context, gs) {
