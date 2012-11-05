@@ -3,7 +3,7 @@ Clone.Blob = function(gs) {
     this.isClone = false;
     this.width = 50;
     this.height = 50;
-    this.moveSpeed = 12;
+    this.moveSpeed = 10;
 
     this.velocity = {
         x: 0,
@@ -60,17 +60,26 @@ Clone.Blob = function(gs) {
         this.coords.x = newXCoord;
     };
 
+    var preRenderCanvas = document.createElement('canvas');
+    preRenderCanvas.width = Clone.canvas.width;
+    preRenderCanvas.height = Clone.canvas.height;
+
     this.draw = function(context, gs) {
-        context.fillStyle = (this.isClone) ? '#27C' : '#444';
-        context.fillRect(this.coords.x - (this.width / 2), this.coords.y - (this.height / 2), this.width, this.height);
+        var preRenderContext = preRenderCanvas.getContext('2d');
+        preRenderContext.clearRect(0, 0, Clone.canvas.width, Clone.canvas.height);
+
+        preRenderContext.fillStyle = (this.isClone) ? '#27C' : '#444';
+        preRenderContext.fillRect(this.coords.x - (this.width / 2), this.coords.y - (this.height / 2), this.width, this.height);
 
         if (expiryTime) {
-            context.font = 'bold 20px sans-serif';
-            context.textBaseline = 'middle';
-            context.textAlign = 'center';
-            context.fillStyle = '#FFF';
-            context.fillText(this.expiresIn(), this.coords.x, this.coords.y);
+            preRenderContext.font = 'bold 20px sans-serif';
+            preRenderContext.textBaseline = 'middle';
+            preRenderContext.textAlign = 'center';
+            preRenderContext.fillStyle = '#FFF';
+            preRenderContext.fillText(this.expiresIn(), this.coords.x, this.coords.y);
         }
+
+        context.drawImage(preRenderCanvas, 0, 0);
     };
 
 };

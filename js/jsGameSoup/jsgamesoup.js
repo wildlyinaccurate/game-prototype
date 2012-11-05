@@ -561,19 +561,10 @@ function JSGameSoup(canvas, framerate) {
 	this.launch = function launch() {
 		var GS = this;
 		// launch our custom loop
-		if (navigator.userAgent.indexOf("MSIE") == -1) {
-			var looping = setInterval(function() {
-				try {
-					GS.gameSoupLoop();
-				} catch(e) {
-					clearInterval(looping);
-					throw(e);
-				}
-			}, 1000 / this.framerate);
-		} else {
-			// internet explorer is too hard to debug with try/catch as it forgets the stack :(
-			var looping = setInterval(function() { GS.gameSoupLoop(); }, 1000 / this.framerate);
-		}
+		(function animationLoop() {
+			requestAnimationFrame(animationLoop);
+			GS.gameSoupLoop();
+		})();
 		// DEBUG:
 		//setInterval(function() { for (var e=0; e<entities.length; e++) console.log(entities[e].x + ", " + entities[e].y); }, 1000);
 		//setInterval(function() { console.log(entities.length) }, 1000);
