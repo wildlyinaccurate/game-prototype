@@ -47,6 +47,7 @@ Clone.Player = function(gs) {
             debugInfo.push('Blob [' + index + ']');
             debugInfo.push('Coords: [' + blob.coords.x + ', ' + blob.coords.y + ']');
             debugInfo.push('Velocity: [' + blob.velocity.x + ', ' + blob.velocity.y + ']');
+            debugInfo.push('Bullets: ~' + blob.bullets.length);
         });
 
         $('#playerDebug').html(debugInfo.join('<br>'));

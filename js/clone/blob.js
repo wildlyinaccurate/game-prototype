@@ -1,5 +1,7 @@
 Clone.Blob = function(gs) {
 
+    var BULLET_CLEANUP_THRESHOLD = 10;
+
     this.isClone = false;
     this.width = 50;
     this.height = 50;
@@ -15,6 +17,8 @@ Clone.Blob = function(gs) {
         y: gs.height * 0.5
     };
 
+    this.bullets = [];
+
     var expiryTime;
 
     // Set or get this blob's expiry time in seconds
@@ -28,10 +32,17 @@ Clone.Blob = function(gs) {
 
     this.shoot = function() {
         var bullet = new Clone.Bullet(gs, {
-            coords: { x: this.coords.x, y: this.coords.y }
+            coords: { x: this.coords.x, y: this.coords.y },
+            owner: this
         });
 
+        var i = this.bullets.push(bullet);
         gs.addEntity(bullet);
+
+        // Clean up old bullets
+        if (i >= BULLET_CLEANUP_THRESHOLD) {
+            this.cleanupBullets();
+        }
     };
 
     this.update = function(gs) {
@@ -80,6 +91,17 @@ Clone.Blob = function(gs) {
         }
 
         context.drawImage(preRenderCanvas, 0, 0);
+    };
+
+    // Clean up any invalid references to bullets
+    this.cleanupBullets = function() {
+        var i = this.bullets.length;
+
+        while (i--) {
+            if ( ! gs.inEntities(this.bullets[i])) {
+                this.bullets.splice(i, 1);
+            }
+        }
     };
 
 };
